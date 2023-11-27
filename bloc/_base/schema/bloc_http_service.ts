@@ -1,5 +1,5 @@
-import type { LogIn, SignUp } from ".";
-import BaseService from "./_base/core/base_service";
+import BaseService from "../core/base_service";
+import type { LogIn, SignUp } from "./bloc_input_schema";
 
 export default class AuthService extends BaseService {
   async signUp(signUp: SignUp) {

@@ -1,11 +1,6 @@
-import { isProd, mode } from "$lib/config";
+import { isProd, mode } from "$lib/bloc/config";
 import { z } from "zod";
-import { tzNow } from "./_base";
-import type { AuthStatus } from "./auth/state";
-
-export interface IStatus {
-  auth: AuthStatus;
-}
+import { tzNow } from "../utils";
 
 const size = () => (!isProd(mode) ? 2 : 8);
 

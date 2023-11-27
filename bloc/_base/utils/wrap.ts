@@ -1,12 +1,10 @@
-import type { IModels } from "$lib/bloc/bloc_output_schema";
 import { Effect, Option } from "effect";
-import type { HttpError, HttpOK } from "../types/http_core";
-import type { ModelKeys } from "../types/model_core";
+import type { HttpErrBound, OmittedErr, SuccessResponse } from "../type";
 
 export type Failable<T, E> = Effect.Effect<never, E, T>;
 export type Noneable<T> = Option.Option<T>;
-export type FailablePromise<K extends ModelKeys> = Promise<
-  Failable<IModels[K] & HttpOK, HttpError>
+export type FailablePromise<K extends OmittedErr> = Promise<
+  Failable<SuccessResponse<K>, HttpErrBound>
 >;
 
 interface IWrap<T> {

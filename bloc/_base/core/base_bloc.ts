@@ -1,19 +1,21 @@
-import { children } from "$lib/bloc/bloc_http_controller";
-import type { IModels } from "$lib/bloc/bloc_output_schema";
-import { isProd, mode } from "$lib/config";
+import { isProd, mode } from "$lib/bloc/config";
 import { Effect, Option } from "effect";
+import { children } from "../schema";
 import type {
   BaseChildrenKey,
   Children,
-  HttpError,
-  HttpOK,
-  IBaseBlocCore,
-  ModelKeys,
-} from "../types";
+  NullableErrBound,
+  OmittedErr,
+  SuccessResponse,
+} from "../type";
 import { Optionality, type FailablePromise, type Noneable } from "../utils";
-import type { BaseEvent } from "./base_event";
+import type BaseEvent from "./base_event";
 
-export abstract class BaseBloc<T, U extends BaseEvent<T>>
+interface IBaseBlocCore<T, U extends BaseEvent<T>> {
+  setEvent(e: U): void;
+}
+
+export default abstract class BaseBloc<T, U extends BaseEvent<T>>
   implements IBaseBlocCore<T, U>
 {
   constructor(private readonly state$: T) {}
@@ -39,10 +41,10 @@ export abstract class BaseBloc<T, U extends BaseEvent<T>>
     return Optionality.wrap(this.getOne("controllers")).unwrap()!;
   }
 
-  protected async try<K extends ModelKeys>(context: {
+  protected async try<K extends OmittedErr>(context: {
     result: FailablePromise<K>;
-    emit?: (ok: IModels[K] & HttpOK) => void;
-  }): Promise<HttpError | null> {
+    emit?: (ok: SuccessResponse<K>) => void;
+  }): NullableErrBound {
     return await Effect.runPromise(
       Effect.match(await context.result, {
         onSuccess(ok) {

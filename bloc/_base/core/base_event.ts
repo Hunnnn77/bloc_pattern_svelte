@@ -7,9 +7,9 @@ interface Ok {
   schema: z.ZodObject<any>;
 }
 
-export abstract class BaseEvent<T> {
+export default abstract class BaseEvent<T> {
+  constructor() {}
   abstract update(state$: T): void;
-
   protected ok(arg: Ok) {
     const evaluator = () => {
       switch (true) {

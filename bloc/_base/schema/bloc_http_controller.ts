@@ -1,4 +1,4 @@
-import type { Children } from "./_base";
+import type { Children } from "../type";
 import AuthService from "./bloc_http_service";
 
 interface Services {
@@ -13,7 +13,6 @@ export interface Configs {}
 export interface Controllers {
   authController: AuthController;
 }
-
 export const children: Children = {
   configs: {},
   controllers: {

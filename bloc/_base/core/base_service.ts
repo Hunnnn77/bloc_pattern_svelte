@@ -1,22 +1,21 @@
-import type { IModels } from "$lib/bloc/bloc_output_schema";
-import { mode } from "$lib/config";
+import { mode } from "$lib/bloc/config";
 import { Effect } from "effect";
 import type {
   DomainKeys,
-  HttpError,
-  HttpOK,
+  HttpErrBound,
   MethodKeys,
+  OmittedErr,
   Req,
-} from "../types/http_core";
-import type { ModelKeys } from "../types/model_core";
-import type { FailablePromise } from "../utils/wrap";
+  SuccessResponse,
+} from "../type";
+import type { FailablePromise } from "../utils";
 
 export default abstract class BaseService {
   protected async try<
     V extends DomainKeys,
     M extends MethodKeys,
-    K extends ModelKeys,
-  >(method: M, req: Req<V, M, V>): FailablePromise<K> {
+    K extends OmittedErr,
+  >(method: M, req: Req<V, M, V>): FailablePromise<OmittedErr> {
     const query = (req: Req<V, M, V>) => {
       let path: string;
       let q: string;
@@ -57,6 +56,7 @@ export default abstract class BaseService {
           },
           catch: (err) => {
             isDev();
+            if (err instanceof TypeError) return "network error";
             return err;
           },
         }),
@@ -64,7 +64,7 @@ export default abstract class BaseService {
     );
   }
 
-  private async _fetcher<K extends ModelKeys>(
+  private async _fetcher<K extends OmittedErr>(
     res: Response,
   ): FailablePromise<K> {
     const isSuccess = (code: number): boolean => {
@@ -73,13 +73,13 @@ export default abstract class BaseService {
     };
 
     if (!isSuccess(res.status)) {
-      const err: HttpError = {
+      const err: HttpErrBound = {
         code: res.status,
         message: res.statusText,
       };
       return Effect.fail(err);
     }
-    const ok = (await res.json()) as IModels[K] & HttpOK;
+    const ok = (await res.json()) as SuccessResponse<K>;
     return Effect.succeed(ok);
   }
 }

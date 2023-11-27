@@ -1,5 +1,5 @@
-import { BaseEvent } from "../_base/core";
-import { ResponseDataSchema } from "../bloc_output_schema";
+import BaseEvent from "../../core/base_event";
+import { ResponseDataSchema } from "../../schema";
 import type AuthState from "./state";
 import type { AuthEventArgument, AuthStatus } from "./state";
 
