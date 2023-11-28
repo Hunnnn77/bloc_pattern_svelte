@@ -3,13 +3,13 @@ import type {
   NullableErrPromise,
   OmittedErr,
   SuccessResponse,
-  Unwrap,
-} from "../type";
+  Transformer,
+} from ".";
 
 export type Failable<T, E> = Effect.Effect<never, E, T>;
 export type Noneable<T> = Option.Option<T>;
 export type FailablePromise<K extends OmittedErr> = Promise<
-  Failable<SuccessResponse<K>, Unwrap<NullableErrPromise>>
+  Failable<SuccessResponse<K>, Transformer<NullableErrPromise>>
 >;
 
 interface IWrap<T> {

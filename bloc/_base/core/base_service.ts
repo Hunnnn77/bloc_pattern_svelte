@@ -1,14 +1,14 @@
-import { mode } from "$lib/bloc/config";
 import { Effect } from "effect";
+import { mode } from "../a/config";
 import type {
   DomainKeys,
   Err,
+  FailablePromise,
   MethodKeys,
   OmittedErr,
   Req,
   SuccessResponse,
 } from "../type";
-import type { FailablePromise } from "../utils";
 
 export default abstract class BaseService {
   protected async try<

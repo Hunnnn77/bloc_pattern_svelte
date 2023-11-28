@@ -1,5 +1,5 @@
 import BaseBloc from "../../core/base_bloc";
-import type { AnyErrKeys } from "../../type";
+import type { AnyErrKeys } from "../type";
 import type ErrEvent from "./event";
 import { AppendErrEvent, InitialErrEvent } from "./event";
 import ErrState from "./state";

@@ -1,14 +1,15 @@
-import { isProd, mode } from "$lib/bloc/config";
 import { Effect, Option } from "effect";
-import { children } from "../schema";
-import type {
-  BaseChildrenKey,
-  Children,
-  NullableErrPromise,
-  OmittedErr,
-  SuccessResponse,
+import { children, isProd, mode } from "../a/config";
+import {
+  Optionality,
+  type BaseChildrenKey,
+  type Children,
+  type FailablePromise,
+  type Noneable,
+  type NullableErrPromise,
+  type OmittedErr,
+  type SuccessResponse,
 } from "../type";
-import { Optionality, type FailablePromise, type Noneable } from "../utils";
 import type BaseEvent from "./base_event";
 
 interface IBaseBlocCore<T, U extends BaseEvent<T>> {

@@ -1,7 +1,7 @@
 import BaseService from "../core/base_service";
-import type { LogIn, SignUp } from "./bloc_input_schema";
+import type { LogIn, SignUp } from "./schema";
 
-export default class AuthService extends BaseService {
+class AuthService extends BaseService {
   async signUp(signUp: SignUp) {
     return await this.try("POST", {
       _domain: "root",
@@ -33,4 +33,21 @@ export default class AuthService extends BaseService {
       },
     });
   }
+}
+
+export interface Domain {
+  root: "http://localhost:3000";
+}
+export interface Params {
+  GET: "";
+  POST: "signup" | "login" | "logout";
+  DELETE: "";
+  PUT: "";
+}
+export interface Queries {
+  root: "";
+}
+
+export class AuthController {
+  authService: AuthService = new AuthService();
 }

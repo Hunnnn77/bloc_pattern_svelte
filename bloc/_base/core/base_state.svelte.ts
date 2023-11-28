@@ -1,10 +1,5 @@
-import type {
-  ConstraintByStatus,
-  IModels,
-  IStatus,
-  OmittedErr,
-  StatusKeys,
-} from "../type";
+import type { IModels, IStatus } from "../a/type";
+import type { ConstraintByStatus, OmittedErr, StatusKeys } from "../type";
 
 export interface IArgumentCore<
   S extends StatusKeys,

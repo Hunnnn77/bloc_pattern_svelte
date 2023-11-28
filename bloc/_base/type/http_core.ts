@@ -1,7 +1,7 @@
-import type { Domain, Params, Queries } from "../schema";
-import type { IModels, OmittedErr } from "./bloc_core";
+import type { Domain, Params, Queries } from "../a/service";
+import type { AnyErrKeys, IModels } from "../a/type";
+import type { OmittedErr } from "./bloc_core";
 
-export type AnyErrKeys = "hello" | "world";
 interface ErrorBound {
   http: HttpError;
   any: AnyError;
@@ -17,7 +17,7 @@ export type NullableErrPromise = Promise<
   HttpError | Record<string, any> | null
 >;
 export type Err<K extends keyof ErrorBound> = ErrorBound[K];
-export type Unwrap<T> = T extends Promise<any>
+export type Transformer<T> = T extends Promise<any>
   ? Awaited<NullableErrPromise> | null
   : Partial<T>;
 export interface Req<

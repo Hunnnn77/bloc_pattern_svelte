@@ -1,6 +1,6 @@
-import { isProd, mode } from "$lib/bloc/config";
 import { z } from "zod";
 import { tzNow } from "../utils";
+import { isProd, mode } from "./config";
 
 const size = () => (!isProd(mode) ? 2 : 8);
 
@@ -13,6 +13,10 @@ export const signUpSchema = z.object({
   password: z.string().min(size()),
   createdAt: z.string().optional().default(tzNow),
 });
+export const AuthResponseSchema = z.object({
+  ok: z.boolean(),
+});
 
 export type LogIn = z.infer<typeof loginSchema>;
 export type SignUp = z.infer<typeof signUpSchema>;
+export type AuthResponse = z.infer<typeof AuthResponseSchema>;

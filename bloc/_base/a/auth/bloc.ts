@@ -1,6 +1,6 @@
 import BaseBloc from "../../core/base_bloc";
-import type { LogIn, SignUp } from "../../schema";
-import type { IModels } from "../../type";
+import type { SignUp, LogIn } from "../schema";
+import type { IModels } from "../type";
 import type AuthEvent from "./event";
 import { LogInEvent, LogOutEvent } from "./event";
 import AuthState from "./state";
