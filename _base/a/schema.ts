@@ -1,8 +1,9 @@
+import { MODE } from "$lib/bloc/context";
 import { z } from "zod";
 import { tzNow } from "../utils";
-import { isProd, mode } from "./config";
+import { isProd } from "./config";
 
-const size = () => (!isProd(mode) ? 2 : 8);
+const size = () => (!isProd(MODE) ? 2 : 8);
 
 export const loginSchema = z.object({
   email: z.string().email(),

@@ -1,5 +1,7 @@
+import { MODE } from "$lib/bloc/context";
 import { Effect, Option } from "effect";
-import { children, isProd, mode } from "../a/config";
+import { isProd } from "../a/config";
+import { children } from "../a/type";
 import {
   Optionality,
   type BaseChildrenKey,
@@ -49,11 +51,11 @@ export default abstract class BaseBloc<T, U extends BaseEvent<T>>
     return await Effect.runPromise(
       Effect.match(await context.result, {
         onSuccess(ok) {
-          if (!isProd(mode)) {
+          if (!isProd(MODE)) {
             console.log(`success|>\n${JSON.stringify(ok, null, 2)}\n`);
           }
           if (!context.emit) {
-            if (!isProd(mode))
+            if (!isProd(MODE))
               console.warn("anything has't been emit to event");
             return null;
           }
@@ -61,7 +63,7 @@ export default abstract class BaseBloc<T, U extends BaseEvent<T>>
           return null;
         },
         onFailure(error) {
-          if (!isProd(mode)) {
+          if (!isProd(MODE)) {
             console.log(`failure|>\n${JSON.stringify(error, null, 2)}`);
           }
           return error;

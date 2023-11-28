@@ -47,7 +47,9 @@ export interface Params {
 export interface Queries {
   root: "";
 }
-
-export class AuthController {
+export default class AuthController {
   authService: AuthService = new AuthService();
+}
+export interface Controllers {
+  authController: AuthController;
 }

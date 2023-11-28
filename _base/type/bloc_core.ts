@@ -1,5 +1,5 @@
-import type { Configs, Controllers } from "../a/config";
-import type { IModels, IStatus } from "../a/type";
+import type { Controllers } from "../a/service";
+import type { Configs, IModels, IStatus } from "../a/type";
 
 export type AnyErrType = IModels["err"]["any"];
 interface BaseChildren<T, U> {

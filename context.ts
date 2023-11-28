@@ -1,14 +1,16 @@
-import { getContext, setContext } from "svelte";
 import type { AnyErrKeys, LogIn } from "./_base";
 import AuthBloc from "./_base/a/auth/bloc";
+import type { DevMode } from "./_base/a/config";
 import ErrBloc from "./_base/a/err/bloc";
 import type { AnyErrType } from "./_base/type";
+
+export const MODE: DevMode = "dev";
 
 const authBloc = new AuthBloc();
 const authErrBloc = new ErrBloc();
 const errBloc = new ErrBloc();
 
-const ctx = {
+export const ctx = {
   auth: {
     state: authBloc.state,
     err: authErrBloc.state,
@@ -22,13 +24,3 @@ const ctx = {
     remove: (k: AnyErrKeys) => errBloc.remove(k),
   },
 } as const;
-
-type Keys = keyof typeof ctx;
-export const setCtx = () => {
-  const keys = Object.keys(ctx) as Keys[];
-  for (const k of keys) {
-    setContext(k, ctx[k]);
-  }
-};
-export const getCtx = <K extends keyof T, T = typeof ctx>(k: K): T[K] =>
-  getContext(k) as T[K];

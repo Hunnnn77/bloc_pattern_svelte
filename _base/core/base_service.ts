@@ -1,5 +1,5 @@
+import { MODE } from "$lib/bloc/context";
 import { Effect } from "effect";
-import { mode } from "../a/config";
 import type {
   DomainKeys,
   Err,
@@ -34,7 +34,7 @@ export default abstract class BaseService {
       await Effect.runPromise(
         Effect.tryPromise({
           try: () => {
-            if (mode === "dev") {
+            if (MODE === "dev") {
               console.log(`request|>\n${method.toUpperCase()}: ${query(req)}`);
               if (req.request.body)
                 console.log(
@@ -51,7 +51,7 @@ export default abstract class BaseService {
             });
           },
           catch: (err) => {
-            if (mode === "dev") {
+            if (MODE === "dev") {
               console.error(`err|>\n${method.toUpperCase()}: ${query(req)}`);
             }
             return err;
