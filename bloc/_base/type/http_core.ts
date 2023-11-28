@@ -11,7 +11,7 @@ interface HttpResponse {
 }
 interface HttpOK extends HttpResponse {}
 interface HttpError extends HttpResponse {}
-export type AnyError = Record<AnyErrKeys, true>;
+export type AnyError = { [k in AnyErrKeys]: true };
 export type SuccessResponse<T extends OmittedErr> = IModels[T] & HttpOK;
 export type NullableErrPromise = Promise<
   HttpError | Record<string, any> | null
