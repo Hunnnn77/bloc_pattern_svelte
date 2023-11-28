@@ -1,7 +1,7 @@
 import { getContext, setContext } from "svelte";
+import type { AnyErrArgument, AnyErrKeys, LogIn } from "./_base";
 import AuthBloc from "./_base/a/auth/bloc";
 import ErrBloc from "./_base/a/err/bloc";
-import type { LogIn, ErrHttp, ErrAny } from "./_base";
 
 const authBloc = new AuthBloc();
 const authErrBloc = new ErrBloc();
@@ -10,14 +10,15 @@ const errBloc = new ErrBloc();
 const ctx = {
   auth: {
     state: authBloc.state,
-    login: async (login: LogIn) => await authBloc.logIn(login),
-    logout: async () => await authBloc.logOut(),
     err: authErrBloc.state,
-    catchErr: (e: ErrHttp) => authErrBloc.catchErr(e),
+    login: async (login: LogIn) =>
+      authErrBloc.append(await authBloc.logIn(login)),
+    logout: async () => authErrBloc.append(await authBloc.logOut()),
   },
   err: {
     err: errBloc.state,
-    catchErr: (e: ErrAny) => errBloc.catchErr(e),
+    append: (e: AnyErrArgument) => errBloc.append(e),
+    remove: (k: AnyErrKeys) => errBloc.remove(k),
   },
 } as const;
 

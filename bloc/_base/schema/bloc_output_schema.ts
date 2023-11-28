@@ -1,7 +1,7 @@
 import { z } from "zod";
 
-export const ResponseDataSchema = z.object({
+export const AuthResponseSchema = z.object({
   ok: z.boolean(),
 });
 
-export type ResponseData = z.infer<typeof ResponseDataSchema>;
+export type AuthResponse = z.infer<typeof AuthResponseSchema>;

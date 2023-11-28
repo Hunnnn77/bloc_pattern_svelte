@@ -3,19 +3,18 @@ import type { z } from "zod";
 
 interface Ok {
   _tag: string;
-  state: { status: string; from?: unknown; to?: unknown };
+  state: { statusOrErr: string; from?: unknown; to?: unknown };
   schema: z.ZodObject<any>;
 }
 
 export default abstract class BaseEvent<T> {
-  constructor() {}
   abstract update(state$: T): void;
   protected ok(arg: Ok) {
     const evaluator = () => {
       switch (true) {
-        case arg._tag !== arg.state.status:
+        case arg._tag !== arg.state.statusOrErr:
           return Effect.fail(
-            `_tag needs: ${arg._tag} / get: ${arg.state.status}`,
+            `_tag needs: ${arg._tag} / get: ${arg.state.statusOrErr}`,
           );
         case arg.state.from:
           return Effect.fail(

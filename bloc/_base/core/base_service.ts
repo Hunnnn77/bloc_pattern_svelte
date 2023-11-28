@@ -2,7 +2,7 @@ import { mode } from "$lib/bloc/config";
 import { Effect } from "effect";
 import type {
   DomainKeys,
-  HttpErrBound,
+  Err,
   MethodKeys,
   OmittedErr,
   Req,
@@ -30,21 +30,17 @@ export default abstract class BaseService {
       return `${req.request.url}${path}${q}`.trim();
     };
 
-    const isDev = () => {
-      if (mode === "dev") {
-        console.log(`request|>\n${method.toUpperCase()}: ${query(req)}`);
-        if (req.request.body)
-          console.log(
-            `with body: ${JSON.stringify(req.request.body, null, 2)}\n`,
-          );
-      }
-    };
-
     return await this._fetcher<K>(
       await Effect.runPromise(
         Effect.tryPromise({
           try: () => {
-            isDev();
+            if (mode === "dev") {
+              console.log(`request|>\n${method.toUpperCase()}: ${query(req)}`);
+              if (req.request.body)
+                console.log(
+                  `body|> ${JSON.stringify(req.request.body, null, 2)}\n`,
+                );
+            }
             return fetch(query(req), {
               credentials: "include",
               method,
@@ -55,8 +51,9 @@ export default abstract class BaseService {
             });
           },
           catch: (err) => {
-            isDev();
-            if (err instanceof TypeError) return "network error";
+            if (mode === "dev") {
+              console.error(`err|>\n${method.toUpperCase()}: ${query(req)}`);
+            }
             return err;
           },
         }),
@@ -73,8 +70,7 @@ export default abstract class BaseService {
     };
 
     if (!isSuccess(res.status)) {
-      const err: HttpErrBound = {
-        code: res.status,
+      const err: Err<"http"> = {
         message: res.statusText,
       };
       return Effect.fail(err);

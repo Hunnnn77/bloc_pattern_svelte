@@ -1,23 +1,23 @@
 import type { AuthStatus } from "../a/auth/state";
 import type { ErrStatus } from "../a/err/state";
-import type { Configs, Controllers, ResponseData } from "../schema";
-import type { NullableErrBound, UnwrapFailureOr } from "./http_core";
+import type { AuthResponse, Configs, Controllers } from "../schema";
+import type { AnyError, NullableErrPromise, Unwrap } from "./http_core";
 
-export type ErrAny = IModels["err"]["any"];
-export type ErrHttp = IModels["err"]["http"];
-export type ErrBound = ErrAny | ErrHttp | null;
+export type AnyErrArgument = IModels["err"]["any"];
 export interface IStatus {
   err: ErrStatus;
   auth: AuthStatus;
 }
+
 export interface IModels {
   err: {
-    http: UnwrapFailureOr<NullableErrBound>;
-    any: UnwrapFailureOr<{ hello: string; world: string }>;
+    http: Unwrap<NullableErrPromise>;
+    any: Unwrap<AnyError>;
   };
-  auth: ResponseData;
+  auth: AuthResponse;
 }
-export interface BaseChildren<T, U> {
+
+interface BaseChildren<T, U> {
   configs: T;
   controllers: U;
 }

@@ -6,25 +6,27 @@ export default abstract class ErrEvent extends BaseEvent<ErrState> {
   constructor(protected state: ErrEventArgument) {
     super();
   }
-  protected abstract _tag: ErrEventArgument["status"];
+  protected abstract _tag: ErrEventArgument["statusOrErr"];
 }
 
-export class OnErrEvent extends ErrEvent {
-  protected _tag: ErrStatus = "err";
+export class InitialErrEvent extends ErrEvent {
+  protected _tag: ErrStatus = false;
   update(state$: ErrState): void {
-    const to = Object.assign({}, state$.from, this.state.to);
-    state$.copy({
-      status: this._tag,
-      from: to,
-    });
+    state$.copy({ statusOrErr: this._tag });
   }
 }
 
-export class NoErrEvent extends ErrEvent {
-  protected _tag: ErrStatus = "none";
+export class AppendErrEvent extends ErrEvent {
+  protected _tag: ErrStatus = true;
   update(state$: ErrState): void {
     state$.copy({
-      status: this._tag,
+      statusOrErr: this._tag,
+      from: !state$.from
+        ? this.state.to
+        : {
+            ...state$.from,
+            ...this.state.to,
+          },
     });
   }
 }

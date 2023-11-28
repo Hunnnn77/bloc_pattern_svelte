@@ -1,6 +1,5 @@
 import type {
   ConstraintByStatus,
-  ErrBound,
   IModels,
   IStatus,
   OmittedErr,
@@ -10,9 +9,9 @@ import type {
 export interface IArgumentCore<
   S extends StatusKeys,
   M extends ConstraintByStatus<S>,
-  V = M extends OmittedErr ? IModels[OmittedErr] : ErrBound,
+  V = M extends OmittedErr ? IModels[OmittedErr] : Record<string, any>,
 > {
-  status: IStatus[S];
+  statusOrErr: IStatus[S];
   from?: V;
   to?: V;
 }
@@ -21,14 +20,14 @@ export abstract class IStateCore<
   S extends StatusKeys,
   M extends ConstraintByStatus<S>,
 > {
-  status?: IArgumentCore<S, M>["status"] = $state();
+  statusOrErr: IArgumentCore<S, M>["statusOrErr"] | null = $state(null);
   from?: IArgumentCore<S, M>["from"] = $state();
   constructor(initial: IArgumentCore<S, M>) {
-    this.status = initial.status;
+    this.statusOrErr = initial.statusOrErr;
     this.from = initial.from;
   }
   copy(to: Partial<IArgumentCore<S, M>>): void {
-    this.status = to.status ?? this.status;
+    this.statusOrErr = to.statusOrErr ?? this.statusOrErr;
     this.from = to.from ?? this.from;
   }
 }

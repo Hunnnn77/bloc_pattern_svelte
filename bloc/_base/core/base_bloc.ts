@@ -4,7 +4,7 @@ import { children } from "../schema";
 import type {
   BaseChildrenKey,
   Children,
-  NullableErrBound,
+  NullableErrPromise,
   OmittedErr,
   SuccessResponse,
 } from "../type";
@@ -44,12 +44,13 @@ export default abstract class BaseBloc<T, U extends BaseEvent<T>>
   protected async try<K extends OmittedErr>(context: {
     result: FailablePromise<K>;
     emit?: (ok: SuccessResponse<K>) => void;
-  }): NullableErrBound {
+  }): NullableErrPromise {
     return await Effect.runPromise(
       Effect.match(await context.result, {
         onSuccess(ok) {
-          if (!isProd(mode))
+          if (!isProd(mode)) {
             console.log(`success|>\n${JSON.stringify(ok, null, 2)}\n`);
+          }
           if (!context.emit) {
             if (!isProd(mode))
               console.warn("anything has't been emit to event");
@@ -59,8 +60,9 @@ export default abstract class BaseBloc<T, U extends BaseEvent<T>>
           return null;
         },
         onFailure(error) {
-          if (!isProd(mode))
+          if (!isProd(mode)) {
             console.log(`failure|>\n${JSON.stringify(error, null, 2)}`);
+          }
           return error;
         },
       }),

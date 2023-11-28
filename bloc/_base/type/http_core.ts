@@ -1,19 +1,25 @@
-import type { IModels, OmittedErr } from "./bloc_core";
 import type { Domain, Params, Queries } from "../schema";
+import type { IModels, OmittedErr } from "./bloc_core";
 
-interface HttpResponse {
-  code: number;
+export type AnyErrKeys = "hello" | "world";
+interface ErrorBound {
+  http: HttpError;
+  any: AnyError;
 }
-export interface HttpOK extends HttpResponse {}
-export interface HttpError extends HttpResponse {
+interface HttpResponse {
   message?: string;
 }
+interface HttpOK extends HttpResponse {}
+interface HttpError extends HttpResponse {}
+export type AnyError = Record<AnyErrKeys, true>;
 export type SuccessResponse<T extends OmittedErr> = IModels[T] & HttpOK;
-export type NullableErrBound = Promise<HttpErrBound | null>;
-export type HttpErrBound = HttpError | Record<string, any>;
-export type UnwrapFailureOr<T> = T extends Promise<any>
-  ? Awaited<NullableErrBound> | null
-  : Partial<T> | null;
+export type NullableErrPromise = Promise<
+  HttpError | Record<string, any> | null
+>;
+export type Err<K extends keyof ErrorBound> = ErrorBound[K];
+export type Unwrap<T> = T extends Promise<any>
+  ? Awaited<NullableErrPromise> | null
+  : Partial<T>;
 export interface Req<
   R extends DomainKeys,
   M extends MethodKeys,
