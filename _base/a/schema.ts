@@ -9,11 +9,13 @@ export const loginSchema = z.object({
   email: z.string().email(),
   password: z.string().min(size()),
 });
+
 export const signUpSchema = z.object({
   email: z.string().email(),
   password: z.string().min(size()),
   createdAt: z.string().optional().default(tzNow),
 });
+
 export const AuthResponseSchema = z.object({
   ok: z.boolean(),
 });

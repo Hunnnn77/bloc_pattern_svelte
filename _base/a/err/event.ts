@@ -24,9 +24,19 @@ export class AppendErrEvent extends ErrEvent {
       from: !state$.from
         ? this.state.to
         : {
-            ...state$.from,
-            ...this.state.to,
-          },
+          ...state$.from,
+          ...this.state.to,
+        },
+    });
+  }
+}
+
+export class UpdateErrEvent extends ErrEvent {
+  protected _tag: ErrStatus = true;
+  update(state$: ErrState): void {
+    state$.copy({
+      statusOrErr: this._tag,
+      from: this.state.to
     });
   }
 }
